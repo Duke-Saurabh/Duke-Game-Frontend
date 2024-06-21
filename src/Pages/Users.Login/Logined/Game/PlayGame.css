@@ -1,0 +1,219 @@
+:root {
+    --main-bg-color: #2c3e50;
+    --secondary-bg-color: #ecf0f1;
+    --accent-color: #3498db;
+    --player-bg-color: #e74c3c;
+    --card-bg-color: #f1c40f;
+    --score-bg-color: #9b59b6;
+    --text-color: #2c3e50;
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.game-area {
+    background-color: var(--secondary-bg-color);
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    height: 84vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-right: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+.game-show-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 75%;
+    position: relative;
+}
+
+.player {
+    width: 150px;
+    height: 150px;
+    background-color: var(--player-bg-color);
+    color: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: absolute;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.player-name {
+    font-size: 16px;
+    margin: 0;
+}
+
+.player-score {
+    font-size: 14px;
+    margin: 5px 0 0;
+}
+
+.one {
+    top: 0;
+    left: 0;
+}
+
+.two {
+    top: 0;
+    right: 0;
+}
+
+.three {
+    bottom: 0;
+    left: 0;
+}
+
+.four {
+    bottom: 0;
+    right: 0;
+}
+
+.score {
+    width: 150px;
+    height: 150px;
+    background-color: var(--score-bg-color);
+    color: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+.shuffle-area {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 25%;
+}
+
+.card {
+    width: 80px;
+    height: 120px;
+    background-color: var(--card-bg-color);
+    color: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.chat-area {
+    background-color: var(--secondary-bg-color);
+    width: 23%;
+    height: 84vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.chat {
+    background-color: var(--main-bg-color);
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+    .player {
+        width: 130px;
+        height: 130px;
+    }
+
+    .score {
+        width: 130px;
+        height: 130px;
+    }
+
+    .card {
+        width: 70px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-area {
+        width: 100%;
+        height: 60vh;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .chat-area {
+        width: 100%;
+        height: 30vh;
+    }
+
+    .player {
+        width: 100px;
+        height: 100px;
+    }
+
+    .score {
+        width: 100px;
+        height: 100px;
+    }
+
+    .card {
+        width: 60px;
+        height: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .player {
+        width: 80px;
+        height: 80px;
+    }
+
+    .score {
+        width: 80px;
+        height: 80px;
+    }
+
+    .card {
+        width: 50px;
+        height: 80px;
+    }
+}

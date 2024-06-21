@@ -1,0 +1,12 @@
+*{
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    box-sizing:border-box;
+}
+
+.App{
+    background-color: rgb(78, 199, 174);
+    /* max-width: 1035px; */
+    margin: auto;
+}

@@ -1,0 +1,28 @@
+.footer{
+    background-color:black;
+    height:7vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.footer .simple-footer{
+    display: flex;
+    width:100%;
+    justify-content: center;
+}
+.game-footer{
+    display: flex;
+    width:100%;
+    justify-content: center;
+}
+
+.chatBtn{
+    margin-left: auto;
+}
+
+.suffleBtn{
+    margin-left: auto;
+}

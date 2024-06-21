@@ -1,0 +1,28 @@
+.header{
+    background-color:black;
+    height:8vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap:10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.header a:hover{
+    color:white;
+}
+
+.header a:active,a:focus{
+    color:red;
+}
+
+
+@media screen and (max-width: 350px) {
+    .header{
+        justify-content: space-evenly;
+        gap:2px;
+    }
+}
+

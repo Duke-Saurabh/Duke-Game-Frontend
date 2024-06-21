@@ -1,0 +1,72 @@
+.join-game{
+     text-align: center;
+     color:red;
+     display: grid;
+     place-items: center center;
+     width:100%;
+     height:100%;
+}
+
+.join-game h1{
+    height: fit-content;
+    line-height:125%;
+    margin:5px;
+}
+
+.game{
+    background-color: white;
+    max-width: 550px;
+    margin: auto;
+    color: rgb(146, 24, 159);
+    padding: 10px;
+}
+.teamBtn, .teamBtn:focus,.teamBtn:hover{
+    background-color: rgb(231, 112, 132);
+    outline: 1px solid rgb(231, 112, 132);;
+    border:1px solid rgb(231, 112, 132);
+    offset: 0;
+}
+.team-create input,input {
+    width: 90%;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 5px;
+    border: 1px solid rgb(163, 158, 158);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+    box-shadow: 1px -1px 0px 0px #e9dddd;
+}
+
+input:hover, input:focus {
+    border: 1px solid blue;
+    outline: 1px solid blue;
+}
+
+.team-create button,.team-join button{
+    background-color: rgb(0, 17, 255);
+    color: white;
+    margin:10px;
+    display: inline-block;
+    width:90%;
+}
+
+.team-create button:hover,.team-join button:hover{
+    color: rgb(0, 17, 255);
+    background-color: white;
+    border: 1px solid rgb(0, 17, 255);
+    outline: 1px solid rgb(0, 17, 255);;
+}
+
+.team-create button:focus,.team-join button:focus{
+    border: 1px solid rgb(0, 17, 255);
+    outline: 1px solid rgb(0, 17, 255);;
+}
+@media screen and (max-width: 900px) {
+    .join-game h1{
+        font-size:xx-large;
+    }
+    .main-head{
+        display:None;
+    }
+}
