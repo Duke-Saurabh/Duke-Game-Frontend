@@ -15,20 +15,26 @@ function PlayGame() {
     };
 
     // Function to handle click outside the chat area
-    const handleClickOutside = (event) => {
-        if (chatAreaRef.current && !chatAreaRef.current.contains(event.target) && window.innerWidth <= 920) {
-            setOpenChat(false); // Close chat area if clicked outside and window width is 920 or less
-        }
-    };
+    // const handleClickOutside = (event) => {
+        // if (chatAreaRef.current && !chatAreaRef.current.contains(event.target) && window.innerWidth <= 920) {
+            // setOpenChat(false); // Close chat area if clicked outside and window width is 920 or less
+        // }
+    // };
+
+
+    //.....................other........................//
+    const handleClickOutSideChatArea=()=>{
+        setOpenChat(false);
+    }
 
     // Effect hook to add event listeners for resize and click outside events
     useEffect(() => {
         window.addEventListener('resize', handleResize); // Listen for window resize
-        document.addEventListener('mousedown', handleClickOutside); // Listen for click outside
+        // document.addEventListener('mousedown', handleClickOutside); // Listen for click outside
 
         return () => {
             window.removeEventListener('resize', handleResize); // Clean up resize listener
-            document.removeEventListener('mousedown', handleClickOutside); // Clean up click outside listener
+            // document.removeEventListener('mousedown', handleClickOutside); // Clean up click outside listener
         };
     }, []); // Empty dependency array ensures effect runs only on mount and unmount
 
@@ -36,13 +42,13 @@ function PlayGame() {
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
         width: '320px', // Fixed width for the chat area (can be adjusted)
-       
+       height:'auto'
     };
 
     return (
         <div className='container'>
             <div className='open-chat' onClick={() => setOpenChat(prev => !prev)}>Chat</div>
-            <div className='game-area'>
+            <div className='game-area' onClick={handleClickOutSideChatArea} >
                 {/* Game area content */}
                 <div className='game-show-area'>
                     <div className='player one'>
