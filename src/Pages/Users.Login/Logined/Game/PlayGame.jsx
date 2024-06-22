@@ -10,6 +10,7 @@ function PlayGame() {
         if (window.innerWidth > 920) {
             setOpenChat(true); // Show chat area if window width is greater than 920
         } else {
+            if(window.screen.height - window.innerHeight < 200)
             setOpenChat(false); // Hide chat area if window width is 920 or less
         }
     };
@@ -42,13 +43,12 @@ function PlayGame() {
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
         width: '320px', // Fixed width for the chat area (can be adjusted)
-    //    height:'auto'
-        bottom:window.screen.height - window.innerHeight > 200 ? '350px' : '50px',
-        
+        bottom: window.screen.height - window.innerHeight > 200 ? '350px' : '50px',
     };
+    
 
     const mystYleOpenChatBtn = {
-        display: window.screen.height - window.innerHeight > 200 ? 'none' : 'block',
+        // display: window.screen.height - window.innerHeight > 200 ? 'none' : 'block',
     };
     
 
