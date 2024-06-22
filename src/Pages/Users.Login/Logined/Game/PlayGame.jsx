@@ -43,7 +43,7 @@ function PlayGame() {
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
         width: '320px', // Fixed width for the chat area (can be adjusted)
-        bottom: window.screen.height - window.innerHeight > 200 ? '350px' : '50px',
+        // bottom: window.screen.height - window.innerHeight > 200 ? '350px' : '50px',
     };
     
 

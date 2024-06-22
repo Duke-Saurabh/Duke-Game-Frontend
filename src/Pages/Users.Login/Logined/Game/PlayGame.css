@@ -15,7 +15,6 @@
     padding: 20px;
     box-sizing: border-box;
     padding-top: 3.5px;
-    /* min-width: 315px; */
 }
 
 .game-area {
@@ -133,6 +132,7 @@
 }
 
 .chat-area {
+    display: none; /* Initially hidden */
     background-color: var(--secondary-bg-color);
     width: 28%;
     height: 84vh;
@@ -142,55 +142,59 @@
     box-sizing: border-box;
     text-align: center;
     margin-left: 0px;
-    position:relative;
+    position: relative;
 }
 
-.sent-chats{
-    max-height:72vh;
+.sent-chats {
+    max-height: 72vh;
+    overflow-y: auto;
 }
+
 .chat {
     background-color: var(--main-bg-color);
     color: white;
     border: 1px solid #ccc;
     border-radius: 10px;
-    /* padding: 10px; */
-    /* margin-top: 20px; */
-    display:block;
-    height:40px;
-    text-align: center;
-    margin: auto;
-    width:100%;
-}
-
-.sendBtn{
-    background-color: blue;
+    height: 40px;
+    width: calc(100% - 20px); /* Adjust width */
+    padding: 10px;
+    margin: 10px auto; /* Adjust margin for centering */
+    box-sizing: border-box;
     display: block;
-    width:100%;
-    color:white;
-    margin-top: 2px;
 }
 
-.sendBtn:hover,.sendBtn:focus{
-    color:blue;
-    background-color: white;
-    border:1px solid blue;
-    outline:1px solid blue;
-    offset: 0px;
+.sendBtn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: block;
+    width: calc(100% - 20px); /* Adjust width */
+    margin: 0 auto; /* Center button */
 }
 
-.open-chat{
-    position: absolute;
-    right:0;
-    bottom: 305px;
-    background-color: #32bc69;
-    height:40px;
-    width:70px;
-    color:white;
-    text-align: center;
+.sendBtn:hover ,.sendBtn:focus{
+    border:0px;
+    outline:0px;
+}
+.open-chat {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: var(--accent-color);
+    color: white;
+    width: 70px;
+    height: 40px;
     line-height: 40px;
-    display: none;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
     z-index: 10;
 }
+
 @media (max-width: 1024px) {
     .player {
         width: 180px;
@@ -223,19 +227,37 @@
     }
 
     .chat-area {
+        display: block; /* Show chat area on smaller screens */
+        position: fixed; /* Fix position for better usability */
+        top:60px;
+        right: 0;
         width: 100%;
-        height: 30vh;
-        display:none;/*change*/
-        background-color: rgba(255,255,255,0.3);
-        position:fixed;
-        right: 0px;
-        bottom: 50px;
-        height: auto;
+        max-height: 30vh; /* Limit height */
+        overflow-y: auto; /* Enable scrolling if content exceeds height */
+        background-color: var(--secondary-bg-color);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
     }
 
-    .open-chat{
-        display: block;
+    .open-chat {
+        display: block; /* Ensure chat open button is visible */
+        position: fixed;
+        top: 80px; /* Adjust position as needed */
+        right: 10px; /* Adjust position as needed */
+        background-color: var(--accent-color);
+        color: white;
+        width: 70px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10;
     }
+
     .player {
         width: 160px;
         height: 160px;
@@ -268,3 +290,4 @@
         height: 120px;
     }
 }
+
