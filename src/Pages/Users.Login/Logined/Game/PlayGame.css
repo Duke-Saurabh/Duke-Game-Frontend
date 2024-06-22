@@ -230,7 +230,7 @@
         position:fixed;
         right: 0px;
         bottom: 47px;
-        height: 85vh;
+        height: auto;
     }
 
     .open-chat{

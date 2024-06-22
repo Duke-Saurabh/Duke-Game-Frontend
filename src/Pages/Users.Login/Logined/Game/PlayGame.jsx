@@ -24,7 +24,7 @@ function PlayGame() {
 
     //.....................other........................//
     const handleClickOutSideChatArea=()=>{
-        setOpenChat(false);
+        // setOpenChat(false);
     }
 
     // Effect hook to add event listeners for resize and click outside events
@@ -42,7 +42,7 @@ function PlayGame() {
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
         width: '320px', // Fixed width for the chat area (can be adjusted)
-       height:'auto'
+    //    height:'auto'
     };
 
     return (
