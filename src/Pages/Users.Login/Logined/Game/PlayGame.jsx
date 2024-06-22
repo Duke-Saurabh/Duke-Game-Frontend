@@ -24,6 +24,7 @@ function PlayGame() {
 
     //.....................other........................//
     const handleClickOutSideChatArea=()=>{
+        if(window.innerWidth < 920)
         setOpenChat(false);
     }
 
