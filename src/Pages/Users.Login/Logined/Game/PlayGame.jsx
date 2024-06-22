@@ -7,12 +7,11 @@ function PlayGame() {
 
     // Function to handle window resize
     const handleResize = () => {
-        if (window.innerWidth > 920) {
-            setOpenChat(true); // Show chat area if window width is greater than 920
-        } else {
-            if(window.screen.height - window.innerHeight < 200)
-            setOpenChat(false); // Hide chat area if window width is 920 or less
-        }
+        // if (window.innerWidth > 920) {
+        //     setOpenChat(true); // Show chat area if window width is greater than 920
+        // } else {
+        //     setOpenChat(false); // Hide chat area if window width is 920 or less
+        // }
     };
 
     // Function to handle click outside the chat area
@@ -43,14 +42,12 @@ function PlayGame() {
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
         width: '320px', // Fixed width for the chat area (can be adjusted)
-        // bottom: window.screen.height - window.innerHeight > 200 ? '350px' : '50px',
+    //    height:'auto'
     };
-    
 
-    const mystYleOpenChatBtn = {
-        // display: window.screen.height - window.innerHeight > 200 ? 'none' : 'block',
-    };
-    
+    const mystYleOpenChatBtn={
+        // display:
+    }
 
     return (
         <div className='container'>
