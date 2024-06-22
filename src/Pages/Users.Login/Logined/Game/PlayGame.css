@@ -146,7 +146,7 @@
 }
 
 .sent-chats{
-    height:71vh;
+    max-height:72vh;
 }
 .chat {
     background-color: var(--main-bg-color);
@@ -229,7 +229,7 @@
         background-color: rgba(255,255,255,0.3);
         position:fixed;
         right: 0px;
-        bottom: 47px;
+        bottom: 50px;
         height: auto;
     }
 
