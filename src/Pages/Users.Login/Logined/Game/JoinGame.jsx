@@ -11,9 +11,8 @@ function JoinGame() {
     }
   return (
     <div className='join-game'>
-         <h1 className='main-head'>Welcome to Raja Mantri Chor Sipahi</h1>
          <div className='game'>
-          
+         <h1 className='main-head'>Welcome to Raja Mantri Chor Sipahi</h1>
           <button type='button' className='teamBtn' onClick={()=>{setcreateTeam((prev)=>!prev)}}>Create a Team</button>
 
          {
@@ -36,6 +35,7 @@ function JoinGame() {
              
              <h1>Enter Team Name</h1>
              <input placeholder="Enter Team Name"></input>
+             <input placeholder="Enter Number of rounds" type='number' min={1}></input>
              <button type='button' onClick={handleJoinGame}>Join Game</button>
 
          </div>

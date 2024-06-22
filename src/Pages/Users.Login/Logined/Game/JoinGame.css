@@ -10,7 +10,8 @@
 .join-game h1{
     height: fit-content;
     line-height:125%;
-    margin:5px;
+    margin:0px;
+    font-size: xx-large;
 }
 
 .game{
