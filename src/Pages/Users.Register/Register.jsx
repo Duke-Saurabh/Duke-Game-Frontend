@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Register.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [name, setName] = useState('');
@@ -11,6 +11,8 @@ function Register() {
     const [confirmPasswordNotes, setConfirmPasswordNotes] = useState('');
     const [formError, setFormError] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+
+    const navigate=useNavigate();
 
     useEffect(() => {
         if (repeatPassword.length > 0) {
@@ -58,6 +60,7 @@ function Register() {
             if (response.ok) {
                 console.log('Registration successful', data);
                 alert(`Registration successful ${data}`);
+                navigate('/login');
             } else {
                 console.error('Registration failed', data);
                 setFormError(data.message || 'Registration failed');

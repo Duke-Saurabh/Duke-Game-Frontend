@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
+import { UserProvider } from './userContext/UserContext';
 import Layout from './Layout';
 import { Login, Register } from './Pages/Index';
-import JoinGame from './Pages/Users.Login/Logined/Game/JoinGame';
-import PlayGame from './Pages/Users.Login/Logined/Game/PlayGame';
+import JoinGame from './Pages/Logined/Game/JoinGame';
+import PlayGame from './Pages/Logined/Game/PlayGame';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,9 +24,11 @@ const router = createBrowserRouter(
 
 function App() {
   return (
+    <UserProvider>
     <div className="App">
       <RouterProvider router={router} />
     </div>
+  </UserProvider>
   );
 }
 
