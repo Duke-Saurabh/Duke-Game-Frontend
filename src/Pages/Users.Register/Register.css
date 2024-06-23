@@ -39,7 +39,7 @@ input:hover, input:focus {
 
 .register-area button {
     width: 100%;
-    margin: 15px 0;
+    margin: 15px 0;/* change here */
     color: white;
     background-color: rgb(185, 36, 36);
 }
