@@ -19,6 +19,44 @@
 }
 
 
+.logout-panel{
+    min-width:100%;
+    min-height:100%;
+    background-color: rgba(214, 199, 199, 0.1);
+    /* display: none; */
+    position:absolute;
+    top:0;
+    right:0;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+  }
+
+  .logout-box{
+    width:200px;
+    height:100px;
+    background-color: rgb(242, 242, 86)
+    /* margin-left: 20px; */
+  }
+
+  .logout-box p{
+    text-align: center;
+    margin-top: 10px;
+    color:black;
+  }
+
+  .logout-options{
+    margin-top:25px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .logout-options button{
+    width:50px;
+    padding: 5px;
+  }
+
+
 @media screen and (max-width: 350px) {
     .header{
         justify-content: space-evenly;

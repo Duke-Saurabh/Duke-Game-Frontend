@@ -50,7 +50,6 @@ function Login() {
         // document.cookie = `accessToken=${accessToken}; path=/; secure; HttpOnly`;
         // document.cookie = `refreshToken=${refreshToken}; path=/; secure; HttpOnly`;
   
-        alert('Login successful!');
         setUser(user);
   
         navigate('/game');
