@@ -75,11 +75,11 @@ function Login() {
 
             <button type='button' onClick={handleLogin}>LOGIN</button>
             <div className='signup-section'>
-                <p>Have already an account?<Link to='/'>SIGNUP Here</Link></p>
+                <p>Not have an account?<Link to='/'>SIGNUP Here</Link></p>
             </div>
         </div>
     </div>
   )
 }
-
+//change
 export default Login
