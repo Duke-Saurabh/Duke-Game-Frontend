@@ -1,25 +1,137 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import './PlayGame.css';
+import { UserContext } from '../../../userContext/UserContext';
+import socket from '../../../socket';
+import { useLocation } from 'react-router-dom';
 
 function PlayGame() {
     const [openChat, setOpenChat] = useState(window.innerWidth > 920); // Initial state based on window width
     const chatAreaRef = useRef(null); // Ref to the chat area DOM element
+     
+    const { user, setUser }= useContext(UserContext);
+    const location = useLocation();
+    const { teamSelected, rounds } = location.state || {}; 
 
-    // Function to handle window resize
-    const handleResize = () => {
-        // if (window.innerWidth > 920) {
-        //     setOpenChat(true); // Show chat area if window width is greater than 920
-        // } else {
-        //     setOpenChat(false); // Hide chat area if window width is 920 or less
-        // }
-    };
+    const [teamMates, setTeamMates] = useState({});
+    const [playersJoined,setPlayersJoined]=useState([]);
 
-    // Function to handle click outside the chat area
-    // const handleClickOutside = (event) => {
-        // if (chatAreaRef.current && !chatAreaRef.current.contains(event.target) && window.innerWidth <= 920) {
-            // setOpenChat(false); // Close chat area if clicked outside and window width is 920 or less
-        // }
-    // };
+    const [messToSend,setMessToSend]=useState({});
+    const [recievedMessages,setRecievedMessages]=useState([]);
+
+    useEffect(() => {
+      const fetchTeamMates = async () => {
+        const dataObj = {
+          teamSelected // Assuming teamSelected is defined somewhere in your component
+        };
+  
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dataObj)
+        };
+  
+        try {
+          const response = await fetch('http://localhost:3000/api/v1/users/teamMates', options);
+  
+          if (!response.ok) {
+            throw new Error('Some errors in fetching teamMates');
+          }
+  
+          const responseData = await response.json();
+  
+          const {
+            firstPlayerUserName,
+            secondPlayerUserName,
+            thirdPlayerUserName,
+            fourthPlayerUserName
+          } = responseData.data;
+  
+          setTeamMates({
+            firstPlayerUserName,
+            secondPlayerUserName,
+            thirdPlayerUserName,
+            fourthPlayerUserName
+          });
+  
+        } catch (error) {
+          console.error('Error fetching teamMates:', error.message);
+          // Handle errors as needed
+        }
+      };
+  
+      fetchTeamMates();
+    }, [teamSelected]); 
+  
+    useEffect(() => {
+        console.log(teamMates); 
+      }, [teamMates]); 
+    
+    useEffect(()=>{
+        socket.on('connect', () => {
+         console.log('Connected to server');
+        });
+        socket.on('disconnect', () => {
+         console.log('Disconnected from server');
+
+        });
+        return () => {
+        socket.off('connect');
+        socket.off('disconnect');
+        };
+    })  
+
+    useEffect(()=>{
+        socket.emit('joinGame',{...user,teamSelected,rounds});
+        return()=>{
+            socket.off('joinGame');  
+        }
+    },[]);
+
+    useEffect(()=>{
+        const teamEvent = `/${teamSelected}`;
+        socket.on(teamEvent, (players) => {
+            const mappedPlayers = players.map(player => ({ name: player.name, score: '0' }));
+            setPlayersJoined(mappedPlayers);
+            console.log(playersJoined);
+        });
+        return()=>{
+            socket.off(teamEvent);   
+        }
+    },[teamSelected])
+
+
+
+
+    useEffect(()=>{
+      socket.emit( `/message`,{teamSelected,messToSend}); 
+      // console.log({teamSelected,messToSend});
+    },[teamSelected,messToSend])
+
+    useEffect(()=>{
+      socket.on( `/${teamSelected}/message`,(mess)=>{
+        console.log(mess);
+        setRecievedMessages((prev)=>[...prev,mess])
+        
+      })
+
+      return()=>{
+        socket.off(`/${teamSelected}/message`);
+      }
+    },[teamSelected])
+
+
+    const sendMessRef=useRef(null);
+    const handleMessSend=()=>{
+      // console.log(sendMessRef.current.value);
+      setMessToSend({userName:user.userName,content:sendMessRef.current.value});
+      // console.log(messToSend);
+      sendMessRef.current.value='';
+    }
+    
+   
+
 
 
     //.....................other........................//
@@ -28,17 +140,7 @@ function PlayGame() {
         setOpenChat(false);
     }
 
-    // Effect hook to add event listeners for resize and click outside events
-    useEffect(() => {
-        window.addEventListener('resize', handleResize); // Listen for window resize
-        // document.addEventListener('mousedown', handleClickOutside); // Listen for click outside
-
-        return () => {
-            window.removeEventListener('resize', handleResize); // Clean up resize listener
-            // document.removeEventListener('mousedown', handleClickOutside); // Clean up click outside listener
-        };
-    }, []); // Empty dependency array ensures effect runs only on mount and unmount
-
+   
     // Style object for the chat area
     const mystYle = {
         display: openChat ? 'block' : 'none', // Show or hide chat area based on openChat state
@@ -52,25 +154,43 @@ function PlayGame() {
 
     return (
         <div className='container'>
+            <div className='welcome-note'><h2>Welcome {user?.userName || ''} to Raja Mantri Chor Sipahi</h2></div>
             <div style={mystYleOpenChatBtn} className='open-chat' onClick={() => setOpenChat(prev => !prev)}>Chat</div>
             <div className='game-area' onClick={handleClickOutSideChatArea} >
                 {/* Game area content */}
                 <div className='game-show-area'>
                     <div className='player one'>
-                        <p className='player-name'>Player 1</p>
+                        <p className='player-name'>{teamMates?.firstPlayerUserName || 'Player 1'}</p>
                         <p className='player-score'>Score: 10</p>
                     </div>
                     <div className='player two'>
-                        <p className='player-name'>Player 2</p>
+                        <p className='player-name'>{teamMates?.secondPlayerUserName || 'Player 2'}</p>
                         <p className='player-score'>Score: 8</p>
                     </div>
-                    <div className='score'>Scores</div>
+                    <div className='score'>
+                            <p>Team : {teamSelected}</p>
+                        {
+                          playersJoined.map((player, index) => (
+                          <p key={index}>
+                           {player?.name || ''}: {((player && player?.score == 0 ) ? 'joined' : player.score) || ''}
+                          </p>
+                          ))
+                        }
+                        {
+                            playersJoined.length<4
+                            &&
+                            (
+                                <p>Waiting for Other's to Join</p>
+                            )
+                        }
+                    </div>
+
                     <div className='player three'>
-                        <p className='player-name'>Player 3</p>
+                        <p className='player-name'>{teamMates?.thirdPlayerUserName || 'Player 3'}</p>
                         <p className='player-score'>Score: 15</p>
                     </div>
                     <div className='player four'>
-                        <p className='player-name'>Player 4</p>
+                        <p className='player-name'>{teamMates?.fourthPlayerUserName || 'Player 4'}</p>
                         <p className='player-score'>Score: 5</p>
                     </div>
                 </div>
@@ -84,9 +204,18 @@ function PlayGame() {
             </div>
             {/* Chat area with conditional style */}
             <div className='chat-area' ref={chatAreaRef} style={mystYle}>
-                <div className='sent-chats'></div>
-                <input className='chat' placeholder='My message'></input>
-                <button type='button' className='sendBtn'>Send</button>
+                <div className='sent-chats'>
+                {
+                  recievedMessages.map((mess,index)=>(
+                    <div className='message' key={index}>
+                      <div className='mess-sender'>{mess?.userName}:</div>
+                      <div className='mess-body'>{mess.content}</div>
+                    </div>
+                  ))
+                }
+                </div>
+                <input className='chat' placeholder='My message' ref={sendMessRef}></input>
+                <button type='button' className='sendBtn' onClick={handleMessSend}>Send</button>
             </div>
         </div>
     );

@@ -71,7 +71,7 @@ function Header() {
       )}
       <Link to='/about'>About Us</Link>
       {isLogined && (
-        <button type='button' onClick={()=>setLogout(prev=>!prev)}>Log Out</button>
+        <button type='button' className='logoutBtn' onClick={()=>setLogout(prev=>!prev)}>Log Out</button>
       )}
     </div>
   );

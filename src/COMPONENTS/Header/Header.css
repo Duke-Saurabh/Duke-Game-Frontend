@@ -8,6 +8,7 @@
     gap:10px;
     padding-left: 10px;
     padding-right: 10px;
+    overflow:visible;
 }
 
 .header a:hover{
@@ -38,6 +39,7 @@
     background-color: rgb(242, 242, 86)
     /* margin-left: 20px; */
   }
+ 
 
   .logout-box p{
     text-align: center;

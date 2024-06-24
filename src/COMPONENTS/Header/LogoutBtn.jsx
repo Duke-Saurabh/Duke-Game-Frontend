@@ -7,6 +7,7 @@ function LogoutBtn() {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
+  
   return (
     <div>
        {logout && (

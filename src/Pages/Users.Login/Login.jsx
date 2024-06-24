@@ -12,10 +12,10 @@ function Login() {
 
   const { setUser } = useContext(UserContext);
 
+  
   const handleLogin=async (e)=>{
     e.preventDefault();
 
-  
     if (!email || !userName || !password || [email, userName, password].some(field => field.trim() === '')) {
       alert('All fields are required');
       return;
@@ -81,5 +81,5 @@ function Login() {
     </div>
   )
 }
-//change
+
 export default Login

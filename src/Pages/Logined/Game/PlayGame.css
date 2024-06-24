@@ -18,6 +18,29 @@
     /* min-width: 315px; */
 }
 
+.logoutBtn{
+    z-index: 999;
+}
+
+.welcome-note {
+    position: absolute;
+    top: 0px;
+     left: 0;
+    /*transform: translateX(-50%); */
+    width: 100%;
+    display: block;
+    background-color: black; /* Background color set to black */
+    color: white; /* Text color set to white for better contrast */
+    padding: 10px; /* Optional: Add padding for better appearance */
+}
+
+.welcome-note {
+   
+    text-align: center;
+}
+
+
+
 .game-area {
     background-color: var(--secondary-bg-color);
     width: 75%;
@@ -95,14 +118,16 @@
     color: white;
     border: 2px solid #ccc;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
+    /* align-items: center; */
+    /* justify-content: center; */
     font-weight: bold;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .divider {
@@ -144,10 +169,43 @@
     margin-left: 0px;
     position:relative;
 }
-
-.sent-chats{
-    height:68vh;
+.sent-chats {
+    height: 68vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border: 1px solid black;
+    /* overflow: hidden; */
 }
+
+.message {
+    display: flex;
+    justify-content: space-between;
+    min-height: 45px;
+    background-color:rgba(255,255,255,0.8);
+    color: red;
+    width: 100%;
+    margin: 0;
+    border: 1px solid rgb(232, 225, 225);
+    align-items: center;
+    padding: 5px;
+}
+
+.message:not(:last-child) {
+    margin-bottom: 1px;
+}
+
+
+
+.mess-body{
+    width:90%;
+    margin-left: -5px;
+}
+
+.mess-sender{
+    padding: 15px;
+}
+
 .chat {
     background-color: var(--main-bg-color);
     color: white;
@@ -250,6 +308,8 @@
         width: 120px;
         height: 150px;
     }
+
+    
 }
 
 @media (max-width: 580px) {
@@ -268,3 +328,28 @@
         height: 120px;
     }
 }
+
+@media (max-width:430px) {
+    
+    .welcome-note{
+        font-size:medium;
+        
+    }
+
+    .logoutBtn{
+        margin-top:75px;
+        margin-left: 160px;
+        width:max-content;
+    }
+}
+
+@media (max-width:360px){
+    .welcome-note{
+        font-size:small; 
+    }
+    .logoutBtn{
+        margin-top:23px;
+        margin-right: 0px;
+        width:max-content;
+    }
+} 
