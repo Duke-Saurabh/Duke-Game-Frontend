@@ -4,9 +4,8 @@
       { "source": "/api/:path(.*)", "destination": "https://duke-game-backend.vercel.app/api/:path*" },
       {
         "source": "/socket.io/:path*",
-        "destination": "https://duke-game-backend.vercel.app/socket.io/:path*"
+        "destination": "https://duke-game-backend.vercel.app/:path*"
       },
       { "source": "/(.*)", "destination": "/" }
     ]
 }
-  
