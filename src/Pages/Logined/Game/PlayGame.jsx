@@ -18,6 +18,8 @@ function PlayGame() {
     const [messToSend,setMessToSend]=useState({});
     const [recievedMessages,setRecievedMessages]=useState([]);
 
+    const [importantNotes,setImportantNotes]=useState('Start Game');
+
     useEffect(() => {
       const fetchTeamMates = async () => {
         const dataObj = {
@@ -33,7 +35,7 @@ function PlayGame() {
         };
   
         try {
-          const response = await fetch('http://localhost:3000/api/v1/users/teamMates', options);
+          const response = await fetch('/api/v1/users/teamMates', options);
   
           if (!response.ok) {
             throw new Error('Some errors in fetching teamMates');
@@ -81,28 +83,60 @@ function PlayGame() {
         socket.off('disconnect');
         };
     })  
-
-    useEffect(()=>{
-        socket.emit('joinGame',{...user,teamSelected,rounds});
-        return()=>{
-            socket.off('joinGame');  
+    
+    const handleLeaveGame = async () => {
+      const dataObj = {
+        teamSelected ,
+        userName:user.userName
+      };
+  
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataObj)
+      };
+  
+      try {
+        const response = await fetch('/api/v1/users/teamMates/game/leave', options);
+  
+        if (!response.ok) {
+          throw new Error('Some errors in fetching teamMates');
         }
-    },[]);
+  
+        const responseData = await response.json();
+        alert('You left the match');
+      } catch (error) {
+        console.error('Error in Leaving the Game', error.message);
+      }
+    };
+  
+    useEffect(() => {
+      socket.emit('joinGame', { ...user, teamSelected, rounds });
+  
+      // Cleanup function to handle leaving the game
+      return () => {
+        socket.off('joinGame');  
+        handleLeaveGame();
+        console.log('handleLeaveEnvetCalled');
+      };
+    }, []);
 
     useEffect(()=>{
         const teamEvent = `/${teamSelected}`;
         socket.on(teamEvent, (players) => {
             const mappedPlayers = players.map(player => ({ name: player.name, score: '0' }));
             setPlayersJoined(mappedPlayers);
-            console.log(playersJoined);
         });
+        console.log(teamEvent);
         return()=>{
             socket.off(teamEvent);   
         }
     },[teamSelected])
 
 
-
+  console.log(playersJoined);
 
     useEffect(()=>{
       socket.emit( `/message`,{teamSelected,messToSend}); 
@@ -112,7 +146,7 @@ function PlayGame() {
     useEffect(()=>{
       socket.on( `/${teamSelected}/message`,(mess)=>{
         console.log(mess);
-        setRecievedMessages((prev)=>[...prev,mess])
+        setRecievedMessages((prev)=>([...prev,mess.userName?(mess):({userName:'Sender',content:'Message'})]))
         
       })
 
@@ -152,12 +186,14 @@ function PlayGame() {
         // display:
     }
 
+    
     return (
         <div className='container'>
             <div className='welcome-note'><h2>Welcome {user?.userName || ''} to Raja Mantri Chor Sipahi</h2></div>
             <div style={mystYleOpenChatBtn} className='open-chat' onClick={() => setOpenChat(prev => !prev)}>Chat</div>
             <div className='game-area' onClick={handleClickOutSideChatArea} >
                 {/* Game area content */}
+                <div className='importantNotes'>{importantNotes}</div>
                 <div className='game-show-area'>
                     <div className='player one'>
                         <p className='player-name'>{teamMates?.firstPlayerUserName || 'Player 1'}</p>
@@ -194,6 +230,7 @@ function PlayGame() {
                         <p className='player-score'>Score: 5</p>
                     </div>
                 </div>
+                <button className='sufflebtn'>Card Suffle</button>
                 <div className='divider'></div>
                 <div className='shuffle-area'>
                     <div className='card one'>Card 1</div>
@@ -207,10 +244,12 @@ function PlayGame() {
                 <div className='sent-chats'>
                 {
                   recievedMessages.map((mess,index)=>(
+                    mess && (
                     <div className='message' key={index}>
                       <div className='mess-sender'>{mess?.userName}:</div>
                       <div className='mess-body'>{mess.content}</div>
                     </div>
+                    )
                   ))
                 }
                 </div>

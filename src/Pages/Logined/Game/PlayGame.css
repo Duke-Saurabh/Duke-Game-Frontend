@@ -18,6 +18,37 @@
     /* min-width: 315px; */
 }
 
+.sufflebtn{
+    display: inline-block;
+    width:fit-content;
+    margin: auto;
+    margin-top: -50px;
+    background-color: blue;
+    color: white;
+}
+
+.sufflebtn:hover{
+    border: 1px solid blue;
+    outline: 1px solid blue;
+    background-color: rgb(17, 17, 214);
+    offset: 0;
+    /* margin-top: -50px; */
+}
+
+.sufflebtn:focus{
+    border: 1px solid blue;
+    outline: 1px solid blue;
+    background-color:blue;
+    offset: 0;
+    /* margin-top: -50px; */
+}
+.importantNotes{
+    /* background-color: white; */
+    margin: 1px;
+    margin-top: -18px;
+    width: 100%;
+    text-align: center;
+}
 .logoutBtn{
     z-index: 999;
 }
@@ -313,6 +344,11 @@
 }
 
 @media (max-width: 580px) {
+    .welcome-note{
+        font-size:small;
+        
+    }
+
     .player {
         width: 120px;
         height: 120px;
@@ -327,29 +363,58 @@
         width: 100px;
         height: 120px;
     }
+
+    .game-area{
+        min-width:116%;
+        height: 85vh;
+    }
+
+    .container{
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    
 }
 
 @media (max-width:430px) {
     
     .welcome-note{
-        font-size:medium;
+        font-size:12px;
         
     }
 
-    .logoutBtn{
+    /* .logoutBtn{
         margin-top:75px;
         margin-left: 160px;
         width:max-content;
-    }
+    } */
 }
 
-@media (max-width:360px){
+@media (max-width:383px){
     .welcome-note{
-        font-size:small; 
+        font-size:10px;   
     }
-    .logoutBtn{
+
+    .divider{
+        display: none;
+    }
+
+    .sufflebtn{
+        display: inline-block;
+        width:fit-content;
+        margin: auto;
+        border: 1px solid blue;
+        outline: 1px solid blue;
+        offset: 0;
+        /* margin-top: -50px; */
+    }
+
+    
+
+ 
+    /* .logoutBtn{
         margin-top:23px;
         margin-right: 0px;
         width:max-content;
-    }
+    } */
 } 
