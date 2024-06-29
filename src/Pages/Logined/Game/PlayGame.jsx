@@ -24,11 +24,22 @@ function PlayGame() {
         {role:'Raja',score:1000},{role:'Mantri',score:800},{role:'Sipahi',score:500},{role:'Chor',score:0}
     ])
 
+    const [chorSipahi, setChorSipahi] = useState({Chor:'',Sipahi:''});
+
     const [scores,setScores]=useState({});
     const [playerIdx,setPlayerIdx]=useState(0);
     const [isSuffled,setIsSuffled]=useState(false);
 
+    console.log('chorSipahi: ',chorSipahi)
     useEffect(() => {
+      
+      // setChorSipahi(prev =>
+      //   {
+      //     console.log('prev:',prev);
+      //     return { ...prev, Chor: user?.userName }
+      //   });
+      // setChorSipahi(prev => ({ ...prev, Sipahi: user?.userName }));
+
       const fetchTeamMates = async () => {
         const dataObj = {
           teamSelected // Assuming teamSelected is defined somewhere in your component
@@ -134,7 +145,7 @@ function PlayGame() {
     useEffect(()=>{
         const teamEvent = `/${teamSelected}`;
         socket.on(teamEvent, (players) => {
-            const mappedPlayers = players.map(player => ({ name: player.name, score: '0' }));
+            const mappedPlayers = players.map(player => ({ name: player.name, score: player.score || 0 }));
             setPlayersJoined(mappedPlayers);
         });
         console.log(teamEvent);
@@ -217,8 +228,7 @@ function PlayGame() {
 
       if(playerIdx==4){
         setImportantNotes(`Raja: "Raja Raj Karta Hai Sipahi Chor Ko Pakdo".`);
-
-        
+        return; 
       }
 
       
@@ -251,55 +261,113 @@ function PlayGame() {
       console.log('card clicked: ', index);
 
       if (playersJoined?.[playerIdx]?.name !== user?.userName || isSuffled === false) {
-        return;
+          return;
       }
-    
+
       const { role, score } = cards[index];
       console.log('role:', role);
       console.log('score:', score);
-    
       let newScore, newRole;
-    
       switch (role) {
-        case 'Raja':
-          newScore = score;
-          newRole = role;
-          break;
-        case 'Sipahi':
-          newScore = 'Wait till End';
-          newRole = role;
-          break;
-        case 'Mantri':
-        case 'Chor':
-          newScore = 'Hidden';
-          newRole = 'Hidden';
-          break;
-        default:
-          return;
+          case 'Raja':
+              newScore = score;
+              newRole = role;
+              break;
+          case 'Sipahi':
+              newScore = 'Wait till End';
+              newRole = role;
+              break;
+          case 'Mantri':
+          case 'Chor':
+              newScore = 'Hidden';
+              newRole = 'Hidden';
+              break;
+          default:
+              return;
       }
-    
-      // setScores((prev) => ({
-      //   ...prev,
-      //   [playersJoined[playerIdx].name]: { score: newScore, role: newRole },
-      // }));
-    
-      for(let i=0;i<4;i++){
-        cardRefs[i].current.style.display = 'none';
+      for (let i = 0; i < 4; i++) {
+          cardRefs[i].current.style.display = 'none';
       }
-      socket.emit(`/cardSelect`, { index, playerIndex:playerIdx, team: teamSelected, score:{...scores,
-        [playersJoined[playerIdx].name]: { score: newScore, role: newRole },
-      }});
+      if (role === 'Chor') {
+          setChorSipahi((prev) => ({ ...prev, Chor: user?.userName }))
+      } else if (role === 'Sipahi') {
+          setChorSipahi((prev) => ({ ...prev, Sipahi: user?.userName }))
+      }
+      socket.emit(`/cardSelect`, {
+          chorSipahi: {
+              Chor: role === 'Chor' ? user?.userName : chorSipahi.Chor,
+              Sipahi: role === 'Sipahi' ? user?.userName : chorSipahi.Sipahi
+          },
+          index, playerIndex: playerIdx, team: teamSelected, score: {
+              ...scores,
+              [playersJoined[playerIdx].name]: { name: playersJoined[playerIdx].name, score: newScore, role: newRole, realRole:role }
+          }
+      });
+  }
 
-      return () => {
-        socket.off(`/${teamSelected}/playerIdx`, handlePlayerIdxUpdate);
-      };
-    };
+    const handlePlayerClick=(player)=>{
+      console.log('handlePlayerClick');
+      if(playerIdx!=4){
+        return;
+      }
 
+      if (scores?.[user?.userName]?.realRole!=='Sipahi' || isSuffled === false) {
+        return;
+      }
 
-    const handleCardSelectUpdate = ({playerIndex,index,score}) => {
+      const role=scores?.[player]?.realRole;
+      console.log('player:',player);
+      console.log('player role:',role);
+
+      if(role==='Raja' || role==='Sipahi'){
+        setImportantNotes('This Player Card could not be selected. Choose other one.');
+        return;
+      }
+
+      const suffle=false;
+      const playerIndex=0; 
+      const team=teamSelected;
+      let MantriPlayer='';
+      for(let key in scores){
+        const {realRole}=scores[key];
+        if(realRole==='Mantri'){
+          MantriPlayer=key;
+        }
+      }
+      if(role==='Mantri'){
+        const score= {
+             ...scores,
+            [chorSipahi?.Chor]: { name:chorSipahi?.Chor, score: 500, role: 'Chor', realRole: 'Chor' },
+            [chorSipahi?.Sipahi]: { name:chorSipahi?.Sipahi, score: 0, role: 'Sipahi', realRole: 'Sipahi' },
+            [player]: { name:player, score: 800, role: 'Mantri', realRole: 'Mantri' },
+        };
+        console.log('new score:',score);    
+      
+        socket.emit('/playerSelected',{playerIndex,team,score,suffle});
+      }
+
+      if(role==='Chor'){
+        const score= {
+             ...scores,
+            [chorSipahi?.Chor]: { score: 0, role: 'Chor', realRole: 'Chor' },
+            [chorSipahi?.Sipahi]: { score: 500, role: 'Sipahi', realRole: 'Sipahi' },
+            [MantriPlayer]: { name:MantriPlayer, score: 800, role: 'Mantri', realRole: 'Mantri' },
+        };
+        console.log('new score:',score);   
+        console.log('sent player select socket',playerIndex,team,score,suffle); 
+        socket.emit('/playerSelected',{playerIndex,team,score,suffle});
+      }
+
+    
+    }
+
+    console.log('playerIdx:',(scores?.[user?.userName]?.realRole))
+    const handleCardSelectUpdate = ({ index, playerIndex, team, score, chorSipahi }) => {
       cardRefs[index].current.style.display = 'none';
       setPlayerIdx(playerIndex+1);
       setScores({...score});
+      setChorSipahi(chorSipahi);
+      console.log('socket ChorSipahi: ', chorSipahi)
     };
 
     const handleCardShuffleUpdate = ({ card, suffle }) => {
@@ -308,23 +376,77 @@ function PlayGame() {
           cardRefs[i].current.style.display = 'flex';
         }
       }
+
+      setScores({});
       setCards([...card]);
       console.log(card);
       setIsSuffled(suffle);
-    };    
+    };  
 
+    const handlePlayerSelectUpdate = ({ playerIndex, score, suffle }) => {
+      console.log('recieved player select socket',playerIndex,score,suffle); 
+      setPlayerIdx(playerIndex);
+      setScores(score);
+
+      console.log('new playerIdx:',playerIdx);
+      console.log('new scores:',scores);
+    
+      const playersObj = playersJoined.reduce((acc, player) => {
+        acc[player.name] = player.score;
+        return acc;
+      }, {});
+    
+      console.log('playersObj:',playersObj);
+    
+      const players = [{}, {}, {}, {}];
+      for (const key in score) {
+        const { score: addedScore, role } = score[key];
+        const playerObj = { name: key, score: (playersObj[key] || 0) + addedScore };
+    
+        if (role === 'Raja') {
+          players[0] = playerObj;
+        }
+        if (role === 'Mantri') {
+          players[1] = playerObj;
+        }
+        if (role === 'Sipahi') {
+          players[2] = playerObj;
+        }
+        if (role === 'Chor') {
+          players[3] = playerObj;
+        }
+      }
+    
+      console.log('new players:',players);
+      setPlayersJoined(players);
+
+      console.log('new playerJoined:',playersJoined);
+    
+      setTimeout(() => {
+        console.log('suffling...................');
+        console.log('suffling player idx:',playerIdx);
+        setIsSuffled(suffle);
+      }, 2000);
+    };
+    
+    console.log('wwssssssss',playerIdx);
+    console.log('aaaaaaaaaa',playersJoined);
+    console.log('aaaaaaaaaaa',isSuffled);
 
     useEffect(()=>{
 
       socket.on(`/${teamSelected}/cardSelect`, handleCardSelectUpdate);
-      socket.on(`/${teamSelected}/suffle`,handleCardShuffleUpdate)
-    
+      socket.on(`/${teamSelected}/suffle`,handleCardShuffleUpdate);
+      socket.on(`/${teamSelected}/playerSelected`,handlePlayerSelectUpdate);
       return () => {
         socket.off(`/${teamSelected}/cardSelect`, handleCardSelectUpdate);
-        socket.on(`/${teamSelected}/suffle`,handleCardShuffleUpdate)
+        socket.off(`/${teamSelected}/suffle`,handleCardShuffleUpdate);
+        socket.off(`/${teamSelected}/playerSelected`,handlePlayerSelectUpdate);
       };
 
     })
+
+
 
 
     
@@ -339,12 +461,12 @@ function PlayGame() {
                 {/* Game area content */}
                 <div className='importantNotes'>{importantNotes}</div>
                 <div className='game-show-area'>
-                    <div className='player one'>
+                    <div className='player one' onClick={()=>handlePlayerClick(teamMates?.firstPlayerUserName)}>
                         <p className='player-name'>{teamMates?.firstPlayerUserName || 'Player 1'}</p>
                         <p className='player-role'>Role: {scores[teamMates?.firstPlayerUserName]?.role || 'none'}</p>
                         <p className='player-score'>Score: {scores[teamMates?.firstPlayerUserName]?.score || 'none'}</p>
                     </div>
-                    <div className='player two'>
+                    <div className='player two' onClick={()=>handlePlayerClick(teamMates?.secondPlayerUserName)}>
                         <p className='player-name'>{teamMates?.secondPlayerUserName || 'Player 2'}</p>
                         <p className='player-role'>Role: {scores[teamMates?.secondPlayerUserName]?.role || 'none'}</p>
                         <p className='player-score'>Score: {scores[teamMates?.secondPlayerUserName]?.score || 'none'}</p>
@@ -367,12 +489,12 @@ function PlayGame() {
                         }
                     </div>
 
-                    <div className='player three'>
+                    <div className='player three' onClick={()=>handlePlayerClick(teamMates?.thirdPlayerUserName)}>
                         <p className='player-name'>{teamMates?.thirdPlayerUserName || 'Player 3'}</p>
                         <p className='player-role'>Role: {scores[teamMates?.thirdPlayerUserName]?.role || 'none'}</p>
                         <p className='player-score'>Score: {scores[teamMates?.thirdPlayerUserName]?.score || 'none'}</p>
                     </div>
-                    <div className='player four'>
+                    <div className='player four' onClick={()=>handlePlayerClick(teamMates?.fourthPlayerUserName)}>
                         <p className='player-name'>{teamMates?.fourthPlayerUserName || 'Player 4'}</p>
                         <p className='player-role'>Role: {scores[teamMates?.fourthPlayerUserName]?.role || 'none'}</p>
                         <p className='player-score'>Score: {scores[teamMates?.fourthPlayerUserName]?.score || 'none'}</p>
