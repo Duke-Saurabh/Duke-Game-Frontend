@@ -4,7 +4,7 @@
       { "source": "/api/:path(.*)", "destination": "https://duke-game-backend.vercel.app/api/:path*" },
       {
         "source": "/socket.io/:path*",
-        "destination": "https://duke-game-backend.vercel.app/:path*"
+        "destination": "http://localhost:3000/:path*"
       },
       { "source": "/(.*)", "destination": "/" }
     ]
